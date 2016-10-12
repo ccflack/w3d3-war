@@ -3,7 +3,6 @@ require_relative "deck"
 
 class War
 
-
   attr_accessor :attila_deck,
                 :alexander_deck,
                 :attila_hand,
@@ -63,6 +62,7 @@ class War
       initialize
       play
     else
+      puts "Thanks for playing!"
       exit
     end
   end
