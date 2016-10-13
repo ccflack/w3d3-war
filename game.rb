@@ -3,6 +3,7 @@ require_relative "deck"
 
 class War
 
+
   attr_accessor :attila_deck,
                 :alexander_deck,
                 :attila_hand,
@@ -47,9 +48,9 @@ class War
 
   def output
     if attila_wins.to_i > alexander_wins.to_i
-      puts "Atillia won this game after #{attila_wins} rounds and survived #{ties} WARs."
+      puts "Atillia won this game after #{attila_wins} wins, #{alexander_wins} losses, and #{ties} battles ended in stalemate."
     elsif attila_wins.to_i < alexander_wins.to_i
-      puts "Alexander won this game after #{alexander_wins} rounds and survived #{ties} WARs."
+      puts "Alexander won this game after #{alexander_wins} wins, #{attila_wins} losses, and #{ties} battles ended in stalemate."
     else
       puts "The armies are have reached a stalemate."
     end
@@ -62,7 +63,6 @@ class War
       initialize
       play
     else
-      puts "Thanks for playing!"
       exit
     end
   end

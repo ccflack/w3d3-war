@@ -1,0 +1,101 @@
+require_relative "card"
+require_relative "deck"
+
+class War
+
+  attr_accessor :attila_deck,
+                :alexander_deck,
+                :attila_hand,
+                :alexander_hand,
+                :attila_captures,
+                :alexander_captures,
+                :attila_wins,
+                :alexander_wins,
+                :ties
+
+  def initialize
+    self.attila_deck = Deck.new
+    self.alexander_deck = Deck.new
+    puts attila_deck.box.length
+    self.alexander_wins = 0
+    self.attila_wins = 0
+    self.ties = 0
+    reset_captures
+  end
+
+  def reset_captures
+    self.attila_captures = []
+    self.alexander_captures = []
+  end
+
+  def play
+    attila_deck.shuffle!
+    alexander_deck.shuffle!
+    play_full_deck
+    output
+    rematch?
+  end
+
+  def players_draw
+    self.attila_hand = attila_deck.draw
+    self.alexander_hand = alexander_deck.draw
+  end
+
+  def winner
+    if attila_hand > alexander_hand
+      self.attila_wins += 1
+      self.attila_captures += [attila_hand, alexander_hand]
+    elsif attila_hand < alexander_hand
+      self.alexander_wins += 1
+      self.alexander_captures += [attila_hand, alexander_hand]
+    else
+      self.ties += 1
+    end
+  end
+
+  def play_full_deck
+    until victor?
+      until (attila_deck || alexander_deck).empty?
+        players_draw
+        winner
+      end
+      shuffle_in_captures
+      reset_captures
+    end
+  end
+
+  def victor?
+    attila_deck.box.length >= 104 || alexander_deck.box.length >= 104
+  end
+
+  def shuffle_in_captures
+    self.attila_deck.box += attila_captures
+    self.alexander_deck.box += alexander_captures
+    play
+  end
+
+  def output
+    if attila_wins > alexander_wins
+      puts "Atillia won this game after #{attila_wins} wins, #{alexander_wins} losses, and survived #{ties} WARs."
+    elsif attila_wins < alexander_wins
+      puts "Alexander won this game after #{alexander_wins} wins, #{attila_wins} losses, and survived #{ties} WARs."
+    else
+      puts "The armies are have reached a stalemate."
+    end
+  end
+
+  def rematch?
+    print "Would you like a rematch (y/n)?"
+    response = gets.chomp
+    if response == "y"
+      initialize
+      play
+    else
+      puts "Thanks for playing!"
+      exit
+    end
+  end
+end
+
+war = War.new
+war.play
